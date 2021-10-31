@@ -13,14 +13,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $required = ['title', 'category', 'description', 'price', 'lot-step', 'lot-date'];
     $dest = ['title' => 'Наименование', 'category' => 'Категория', 'description' => 'Описание', 'price' => 'Начальная цена', 'lot-step' => 'Шаг ставки', 'lot-date' => 'Дата окончания торгов'];
     $errors = [];
-    foreach ($required as $key) {
-        if (empty($_POST[$key])) {
-            $errors[$dest[$key]] = "Это поле нужно заполнить";
+    foreach ($required as $value) {
+        if (empty($_POST[$value])) {
+            $errors[$dest[$value]] = "Это поле нужно заполнить";
+        }  else {
+            if ($value == 'price') {
+                if (!filter_var($_POST['price'], FILTER_VALIDATE_INT)) {
+                    $errors[$dest[$value]] = "Допускается ввод только чисел";
+                }
+            }
         }
 
     }
     
-    if (filter_var($_POST['price'], FILTER_VALIDATE_INT))
 
     if($_POST['category'] == 'Выберите категорию') {
         $errors[$dest['category']] = 'Выберите категорию';

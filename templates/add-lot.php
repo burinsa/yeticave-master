@@ -36,7 +36,7 @@
       <div class="form__item <?= $classname_input; ?> "> <!-- form__item--invalid -->
         <label for="lot-name">Наименование</label>
         <input id="lot-name" type="text" name="title" placeholder="Введите наименование лота" value="<?= $value; ?>">
-        <span class="form__error">Введите наименование лота</span>
+        <span class="form__error"><?=$errors['Наименование']?></span>
       </div>
       <?php 
         $classname_input = isset($errors['Категория']) ? 'form__item--invalid' : '';
@@ -64,7 +64,7 @@
           <option>Разное</option>          
         </select>
         <?php endif; ?>
-        <span class="form__error">Выберите категорию</span>
+        <span class="form__error"><?=$errors['Категория']?></span>
       </div>
     </div>
     <?php 
@@ -74,7 +74,7 @@
     <div class="form__item form__item--wide <?= $classname_input; ?>">
       <label for="message">Описание</label>
       <textarea id="message" name="description" placeholder="Напишите описание лота"><?= $value; ?></textarea>
-      <span class="form__error">Напишите описание лота</span>
+      <span class="form__error"><?=$errors['Описание']?></span>
     </div>
     <div class="form__item form__item--file"> <!-- form__item--uploaded -->
       <label>Изображение</label>
@@ -99,7 +99,7 @@
       <div class="form__item form__item--small <?= $classname_input; ?>">
         <label for="lot-rate">Начальная цена</label>
         <input id="lot-rate" type="number" name="price" placeholder="0" value="<?= $value; ?>">
-        <span class="form__error">Введите начальную цену</span>
+        <span class="form__error"><?=$errors['Начальная цена']?></span>
       </div>
     <?php 
         $classname_input = isset($errors['Шаг ставки']) ? 'form__item--invalid' : '';
