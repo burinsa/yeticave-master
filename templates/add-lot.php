@@ -81,12 +81,12 @@
       <div class="preview">
         <button class="preview__remove" type="button">x</button>
         <div class="preview__img">
-          <img src="img/avatar.jpg" width="113" height="113" alt="Изображение лота">
+          <img class="img-prew" src="img/avatar.jpg" width="113" height="113" alt="Изображение лота">
         </div>
       </div>
       <div class="form__input-file">
-        <input class="visually-hidden" type="file" id="photo2" value="">
-        <label for="photo2">
+        <input class="visually-hidden" type="file" id="photo2" name="photo2" value="" onchange="readFile(this)">
+        <label class="prewImg" for="photo2">
           <span>+ Добавить</span>
         </label>
       </div>
@@ -108,7 +108,7 @@
       <div class="form__item form__item--small <?= $classname_input; ?>">
         <label for="lot-step">Шаг ставки</label>
         <input id="lot-step" type="number" name="lot-step" placeholder="0" value="<?= $value; ?>">
-        <span class="form__error">Введите шаг ставки</span>
+        <span class="form__error"><?=$errors['Шаг ставки']?></span>
       </div>
     <?php 
         $classname_input = isset($errors['Дата окончания торгов']) ? 'form__item--invalid' : '';
@@ -117,7 +117,7 @@
       <div class="form__item <?= $classname_input; ?>">
         <label for="lot-date">Дата окончания торгов</label>
         <input class="form__input-date" id="lot-date" type="date" name="lot-date" value="<?= $value; ?>">
-        <span class="form__error">Введите дату завершения торгов</span>
+        <span class="form__error"><?=$errors['Дата окончания торгов']?></span>
       </div>
     </div>
     <span class="form__error form__error--bottom">Пожалуйста, исправьте ошибки в форме.</span>
@@ -126,4 +126,11 @@
 
   <script>
     document.querySelector('main').classList.remove('container');
+    function readFile (input) {
+      let file = input.files[0];
+      let urlFile = URL.createObjectURL(file);
+      let img = document.querySelector('.img-prew');
+      img.setAttribute('src', urlFile);
+      document.querySelector('.preview').style.display = 'block';
+    }
   </script>

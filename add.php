@@ -21,10 +21,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if (!filter_var($_POST['price'], FILTER_VALIDATE_INT)) {
                     $errors[$dest[$value]] = "Допускается ввод только чисел";
                 }
+            } elseif ($value == 'lot-step') {
+                if (!filter_var($_POST['lot-step'], FILTER_VALIDATE_INT)) {
+                    $errors[$dest[$value]] = "Допускается ввод только чисел";
+                }
             }
         }
 
     }
+
+    if (isset($_FILES['photo2'])) {
+        $file_name = $_FILES['photo2']['name'];
+        $file_path = __DIR__ . 'img/';
+        $file_url = 'img/' . $file_name;
+        move_uploaded_file($_FILES['photo2']['tmp_name'], $file_url);
+
+        $lot['img'] = $file_url;
+    }
+    
     
 
     if($_POST['category'] == 'Выберите категорию') {
@@ -39,6 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // print_r($errors);
     // print '<br>';
     // print_r($lot);
+    // print_r ($_FILES['photo2']);
     
 } else {
     $page_add = renderTemplate($path_add, []);
