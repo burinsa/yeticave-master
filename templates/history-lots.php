@@ -24,8 +24,9 @@
   <div class="container">
     <section class="lots">
       <h2>История просмотров</h2>
+      <?php if (isset($new_lots)) : ?>
       <ul class="lots__list">
-        <?php foreach ($lots as $key => $value): ?>
+        <?php foreach ($new_lots as $key => $value): ?>
             <li class="lots__item lot">
                 <div class="lot__image">
                     <img src="<?=$value['img']?>" width="350" height="260" alt="Сноуборд">
@@ -46,6 +47,11 @@
             </li>
         <?php endforeach ?>
       </ul>
+      <?php else : ?>
+        <div>
+          <h1 style="color: brown; text-align: center;">У вас нет просмотренных лотов</h1>
+        </div>
+      <?php endif; ?> 
     </section>
     <ul class="pagination-list">
       <li class="pagination-item pagination-item-prev"><a>Назад</a></li>
@@ -56,3 +62,7 @@
       <li class="pagination-item pagination-item-next"><a href="#">Вперед</a></li>
     </ul>
   </div>
+
+  <script>
+    document.querySelector('main').classList.remove('container');
+  </script>

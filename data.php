@@ -13,6 +13,7 @@ $path_page = '\inpex.php';
 $path_layout = '\layout.php';
 $path_lot = '\lot.php';
 $path_add = '\add-lot.php';
+$path_history = '\history-lots.php';
 
 ///////////////////////////////////////
 
@@ -29,7 +30,7 @@ $lots = [
     Optio deserunt expedita eius fugiat odit ab tempora laborum omnis, quis enim modi? Veniam repellendus officia eligendi expedita eaque minus dolore at fugit similique nesciunt, aperiam itaque. Nemo, repudiandae dolorum.', 'lot-date' => '10-11-2021'],
     ['title' => 'Куртка для сноуборда DC Mutiny Charocal', 'category' => 'Одежда', 'price' => '7500', 'img' => 'img/lot-5.jpg', 'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum praesentium dolorum minima quae excepturi veniam maiores temporibus reiciendis, aliquam iure. Ut nulla, culpa necessitatibus eaque nemo libero! Nemo, dolores repudiandae.
     Optio deserunt expedita eius fugiat odit ab tempora laborum omnis, quis enim modi? Veniam repellendus officia eligendi expedita eaque minus dolore at fugit similique nesciunt, aperiam itaque. Nemo, repudiandae dolorum.', 'lot-date' => '10-11-2021'],
-    ['title' => 'Маска Oakley Canopy', 'category' => 'Разное', 'price' => '5400', 'img' => 'img/lot-6.jpg', 'discription' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum praesentium dolorum minima quae excepturi veniam maiores temporibus reiciendis, aliquam iure. Ut nulla, culpa necessitatibus eaque nemo libero! Nemo, dolores repudiandae.
+    ['title' => 'Маска Oakley Canopy', 'category' => 'Разное', 'price' => '5400', 'img' => 'img/lot-6.jpg', 'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum praesentium dolorum minima quae excepturi veniam maiores temporibus reiciendis, aliquam iure. Ut nulla, culpa necessitatibus eaque nemo libero! Nemo, dolores repudiandae.
     Optio deserunt expedita eius fugiat odit ab tempora laborum omnis, quis enim modi? Veniam repellendus officia eligendi expedita eaque minus dolore at fugit similique nesciunt, aperiam itaque. Nemo, repudiandae dolorum.', 'lot-date' => '10-11-2021']
 ];
 $user_name = 'Константин';
