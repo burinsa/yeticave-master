@@ -33,3 +33,14 @@ function timer ($time) {
         return "Дней: {$day},  " . date('Gч : iм' ,(strtotime("tomorrow") - time()));
     }
 }
+
+function searchUserByEmail ($email, $users) {
+    $result = null;
+    foreach ($users as $user) {
+        if ($user['email'] == $email) {
+            $result = $user;
+            break;
+        }
+    }
+    return $result;
+}
