@@ -1,6 +1,7 @@
 <?php 
 require_once 'data.php';
 require_once 'functions.php';
+session_start();
 
 if (isset($_COOKIE['history'])) {
     $id_lots = json_decode($_COOKIE['history']);
@@ -17,8 +18,7 @@ if (isset($_COOKIE['history'])) {
 }
 
 
-
-$layout_page = renderTemplate($path_layout, ['content' => $history_page, 'categories' => $categories, 'is_auth' => $is_auth, 'user_name' => $user_name, 'user_avatar' => $user_avatar, 'title' => 'История посещения']);
+$layout_page = renderTemplate($path_layout, ['content' => $history_page, 'categories' => $categories, 'username' => $_SESSION['user']['name'], 'user_avatar' => $user_avatar, 'title' => 'История посещения']);
 print $layout_page;
 
 

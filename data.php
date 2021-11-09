@@ -9,11 +9,12 @@ $bets = [
 
 /////////////////////////////////////////
 
-$path_page = '\inpex.php';
+$path_index = '\inpex.php';
 $path_layout = '\layout.php';
 $path_lot = '\lot.php';
 $path_add = '\add-lot.php';
 $path_history = '\history-lots.php';
+$path_login = '\login.php';
 
 ///////////////////////////////////////
 

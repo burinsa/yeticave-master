@@ -22,8 +22,8 @@
       </li>
     </ul>
   </nav>
+  
   <?php
-
   $classname_form = isset($errors) ? 'form--invalid' : ' ';
   ?>
   <form class="form form--add-lot container <?=$classname_form;?>" action="/add.php" method="POST" enctype="multipart/form-data"> <!-- form--invalid -->

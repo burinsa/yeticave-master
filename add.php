@@ -1,7 +1,12 @@
 <?php
 require_once 'functions.php';
 require_once 'data.php';
+session_start();
 
+if(!isset($_SESSION['user'])) {
+    http_response_code(403);
+    exit();
+}
 
 function selected ($option, $val) {
     return ($option == $val) ? 'selected' : '';
@@ -61,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 
-$layout_add = renderTemplate($path_layout, ['content' => $page_add, 'categories' => $categories, 'is_auth' => $is_auth, 'user_name' => $user_name, 'user_avatar' => $user_avatar, 'title' => 'Добавление лота']);
+$layout_add = renderTemplate($path_layout, ['content' => $page_add, 'categories' => $categories, 'username' => $_SESSION['user']['name'], 'user_avatar' => $user_avatar, 'title' => 'Добавление лота']);
 
 print $layout_add;
 

@@ -1,6 +1,7 @@
 <?php
 require_once 'functions.php';
 require_once 'data.php';
+session_start();
 
 $counter_name = 'history'; 
 $id_lots = array();
@@ -31,6 +32,10 @@ if (!$lot) {
 }
 
 $page_lot = renderTemplate($path_lot,['lot' => $lot]);
-$layout_lot = renderTemplate($path_layout, ['content' => $page_lot, 'categories' => $categories, 'is_auth' => $is_auth, 'user_name' => $user_name, 'user_avatar' => $user_avatar, 'title' => $lot['title']]);
+if (isset($_SESSION['user'])) {
+    $layout_lot = renderTemplate($path_layout, ['content' => $page_lot, 'categories' => $categories, 'username' => $_SESSION['user']['name'], 'user_avatar' => $user_avatar, 'title' => $lot['title']]);
+} else {
+    $layout_lot = renderTemplate($path_layout, ['content' => $page_lot, 'categories' => $categories, 'title' => $lot['title']]);
+}
 print $layout_lot;
 ?>
