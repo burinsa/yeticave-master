@@ -17,6 +17,7 @@ session_start();
       }
     }
     print_r($errors);
+    print_r($form);
 
     if(!count($errors) and $user = searchUserByEmail($form['email'], $users)) {
       if(password_verify($form['password'], $user['password'])) {
@@ -24,13 +25,15 @@ session_start();
       } else {
         $errors['password'] = 'Неверный пароль';
       }
-    } else {
+    } elseif (!count($errors) and !$user = searchUserByEmail($form['email'], $users)) {
       $errors['email'] = 'Такой пользователь не найден';
-    }
+    } 
+    print_r($errors);
 
     if (count($errors)) {
       $page_content = renderTemplate($path_login, ['form' => $form, 'errors' => $errors]);
-      
+      $layout_page = renderTemplate($path_layout, ['content' => $page_content, 'categories' => $categories, 'title' => 'Главная']);
+  
     } else {
       header('Location: /index.php');
       exit();
@@ -48,9 +51,6 @@ session_start();
     }
     
   }
-
-  
-  
 
   print $layout_page;
 

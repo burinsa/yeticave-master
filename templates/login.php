@@ -42,7 +42,7 @@
     <div class="form__item form__item--last <?= $classname_input?>">
       <label for="password">Пароль*</label>
       <input id="password" type="text" name="password" value="<?= $value; ?>" placeholder="Введите пароль">
-      <span class="form__error">Введите пароль</span>
+      <span class="form__error"><?= $errors['password'] ?></span>
     </div>
     <button type="submit" class="button">Войти</button>
   </form>
