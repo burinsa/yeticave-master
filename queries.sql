@@ -40,3 +40,43 @@ INSERT INTO rate (rate_date, rate_amount, user_id, lot_id)
  (DATE_SUB(NOW(), INTERVAL 7896 SECOND), 12000, 3, 4),
  (DATE_SUB(NOW(), INTERVAL 6699 SECOND), 9000, 3, 6);
 
+-- добавление индекса
+
+CREATE INDEX cat_name ON categories(cat_name);
+
+CREATE INDEX dt_add ON lots(dt_add);
+
+CREATE INDEX rate_date ON rate(rate_date);
+
+
+-- Получение всех категорий 
+
+SELECT * FROM categories;
+
+-- Получить самые новые открытые лоты.
+
+SELECT l.lot_name, l.lot_price, l.lot_img, COUNT(r.lot_id) AS count_rate, c.cat_name  FROM lots AS l
+JOIN rate AS r ON l.lot_id = r.lot_id
+JOIN categories AS c ON l.cat_id = c.cat_id
+GROUP BY r.lot_id
+ORDER BY l.lot_price DESC
+
+-- Показать лот по его id
+
+SELECT l.lot_id, l.lot_name, l.lot_price, c.cat_name AS category 
+FROM lots AS l
+JOIN categories AS c ON l.cat_id = c.cat_id
+WHERE l.lot_id = 2;
+
+-- Обновить название лота по id
+
+UPDATE lots SET lot_name = 'Синхрофазатрон'
+WHERE lot_id = 2;
+
+-- Получить список свежих ставок лота по id
+
+SELECT r.rate_id, r.rate_date, r.rate_amount, l.lot_name, u.user_name FROM rate AS r
+JOIN lots AS l ON l.lot_id = r.lot_id
+JOIN users AS u ON u.user_id = r.user_id
+WHERE l.lot_id = 1
+ORDER BY r.rate_amount DESC 
