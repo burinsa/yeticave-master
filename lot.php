@@ -33,7 +33,7 @@ if (!$lot) {
 
 $page_lot = renderTemplate($path_lot,['lot' => $lot]);
 if (isset($_SESSION['user'])) {
-    $layout_lot = renderTemplate($path_layout, ['content' => $page_lot, 'categories' => $categories, 'username' => $_SESSION['user']['name'], 'user_avatar' => $user_avatar, 'title' => $lot['title']]);
+    $layout_lot = renderTemplate($path_layout, ['content' => $page_lot, 'categories' => $categories, 'username' => $_SESSION['user']['name'], 'user_avatar' => $_SESSION['user']['user_avatar'], 'title' => $lot['title']]);
 } else {
     $layout_lot = renderTemplate($path_layout, ['content' => $page_lot, 'categories' => $categories, 'title' => $lot['title']]);
 }

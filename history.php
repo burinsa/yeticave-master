@@ -18,7 +18,7 @@ if (isset($_COOKIE['history'])) {
 }
 
 
-$layout_page = renderTemplate($path_layout, ['content' => $history_page, 'categories' => $categories, 'username' => $_SESSION['user']['name'], 'user_avatar' => $user_avatar, 'title' => 'История посещения']);
+$layout_page = renderTemplate($path_layout, ['content' => $history_page, 'categories' => $categories, 'username' => $_SESSION['user']['name'], 'user_avatar' => $_SESSION['user']['user_avatar'], 'title' => 'История посещения']);
 print $layout_page;
 
 

@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 
-$layout_add = renderTemplate($path_layout, ['content' => $page_add, 'categories' => $categories, 'username' => $_SESSION['user']['name'], 'user_avatar' => $user_avatar, 'title' => 'Добавление лота']);
+$layout_add = renderTemplate($path_layout, ['content' => $page_add, 'categories' => $categories, 'username' => $_SESSION['user']['name'], 'user_avatar' => $_SESSION['user']['user_avatar'], 'title' => 'Добавление лота']);
 
 print $layout_add;
 

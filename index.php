@@ -9,7 +9,7 @@ $tomorrow = strtotime("tomorrow");
 $page = renderTemplate($path_index,['lots' => $lots, 'time' => $time_left]);
 
 if (isset($_SESSION['user'])) {
-  $layout_page = renderTemplate($path_layout, ['content' => $page, 'categories' => $categories, 'username' => $_SESSION['user']['name'], 'user_avatar' => $user_avatar, 'title' => 'Главная']);
+  $layout_page = renderTemplate($path_layout, ['content' => $page, 'categories' => $categories, 'username' => $_SESSION['user']['name'], 'user_avatar' => $_SESSION['user']['user_avatar'], 'title' => 'Главная']);
 } else {
   $layout_page = renderTemplate($path_layout, ['content' => $page, 'categories' => $categories, 'title' => 'Главная']);
 }
