@@ -2,6 +2,8 @@
 
 date_default_timezone_set('Europe/Kaliningrad');
 
+// отрисовка шаблона
+
 function renderTemplate ($name, $data) {
     $path = 'templates' . $name;
     if (!file_exists($path)) {
@@ -13,6 +15,8 @@ function renderTemplate ($name, $data) {
     $result = ob_get_clean();
     return $result;    
 }
+
+// округление цены
 
 function format_price ($number) {
     $price = ceil($number);
@@ -33,6 +37,8 @@ function timer ($time) {
         return "Дней: {$day},  " . date('Gч : iм' ,(strtotime("tomorrow") - time()));
     }
 }
+
+// поиск пользователя по email
 
 function searchUserByEmail ($email, $users) {
     $result = null;

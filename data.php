@@ -15,6 +15,8 @@ $path_lot = '\lot.php';
 $path_add = '\add-lot.php';
 $path_history = '\history-lots.php';
 $path_login = '\login.php';
+$path_sign_up = '\sign-up.php';
+$page_error = '\error.php';
 
 ///////////////////////////////////////
 

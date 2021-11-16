@@ -16,8 +16,8 @@ session_start();
         $errors[$value] = 'Это поле нужно заполнить!';
       }
     }
-    print_r($errors);
-    print_r($form);
+    // print_r($errors);
+    // print_r($form);
 
     if(!count($errors) and $user = searchUserByEmail($form['email'], $users)) {
       if(password_verify($form['password'], $user['password'])) {
@@ -28,11 +28,11 @@ session_start();
     } elseif (!count($errors) and !$user = searchUserByEmail($form['email'], $users)) {
       $errors['email'] = 'Такой пользователь не найден';
     } 
-    print_r($errors);
+    // print_r($errors);
 
     if (count($errors)) {
       $page_content = renderTemplate($path_login, ['form' => $form, 'errors' => $errors]);
-      $layout_page = renderTemplate($path_layout, ['content' => $page_content, 'categories' => $categories, 'title' => 'Главная']);
+      $layout_page = renderTemplate($path_layout, ['content' => $page_content, 'categories' => $categories, 'title' => 'Вход']);
   
     } else {
       header('Location: /index.php');
@@ -47,13 +47,13 @@ session_start();
     }
      else {
       $page_content = renderTemplate($path_login, []);
-      $layout_page = renderTemplate($path_layout, ['content' => $page_content, 'categories' => $categories, 'title' => 'Главная']);
+      $layout_page = renderTemplate($path_layout, ['content' => $page_content, 'categories' => $categories, 'title' => 'Вход']);
     }
     
   }
 
   print $layout_page;
 
-  print_r($_SESSION);
+  // print_r($_SESSION);
 
 ?>

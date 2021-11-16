@@ -11,7 +11,7 @@
 <header class="main-header">
     <div class="main-header__container container">
         <h1 class="visually-hidden">YetiCave</h1>
-        <a class="main-header__logo">
+        <a href="/index.php" class="main-header__logo">
             <img src="img/logo.svg" width="160" height="39" alt="Логотип компании YetiCave">
         </a>
         <form class="main-header__search" method="get" action="https://echo.htmlacademy.ru">
@@ -31,7 +31,7 @@
         <?php else: ?> 
         <ul class="user-menu__list">
             <li class="user-menu__item">
-                <a href="#">Регистрация</a>
+                <a href="/sign-up.php">Регистрация</a>
             </li>
             <li class="user-menu__item">
                 <a href="/login.php">Вход</a>
@@ -43,7 +43,53 @@
     </div>
 </header>
 
-<main class="container"><?= $content ?></main>
+<main class="container">
+<?php if ($_SERVER['REQUEST_URI'] == '/' || $_SERVER['REQUEST_URI'] == '/index.php') :?>
+<section class="promo">
+    <h2 class="promo__title">Нужен стафф для катки?</h2>
+    <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
+    <ul class="promo__list">
+        <li class="promo__item promo__item--boards">
+            <a class="promo__link" href="pages/all-lots.html">Доски и лыжи</a>
+        </li>
+        <li class="promo__item promo__item--attachment">
+            <a class="promo__link" href="pages/all-lots.html">Крепления</a>
+        </li>
+        <li class="promo__item promo__item--boots">
+            <a class="promo__link" href="pages/all-lots.html">Ботинки</a>
+        </li>
+        <li class="promo__item promo__item--clothing">
+            <a class="promo__link" href="pages/all-lots.html">Одежда</a>
+        </li>
+        <li class="promo__item promo__item--tools">
+            <a class="promo__link" href="pages/all-lots.html">Инструменты</a>
+        </li>
+        <li class="promo__item promo__item--other">
+            <a class="promo__link" href="pages/all-lots.html">Разное</a>
+        </li>
+    </ul>
+</section>
+<script>
+    document.querySelector('main').classList.add('container');
+</script>
+<?php else: ?>
+<div>
+<nav class="nav">
+    <ul class="nav__list container">
+    <?php foreach ($categories as $item): ?>
+        <li class="nav__item">
+            <a href="all-lots.html"><?=$item?></a>
+        </li>
+    <?php endforeach ?>
+    </ul>
+  </nav>
+</div>
+<script>
+    document.querySelector('main').classList.remove('container');
+</script>
+<?php endif;?>
+<?= $content ?>
+</main>
 
 <footer class="main-footer">
     <nav class="nav">
@@ -91,6 +137,5 @@
         </div>
     </div>
 </footer>
-
 </body>
 </html>
