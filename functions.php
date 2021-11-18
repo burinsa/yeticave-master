@@ -31,7 +31,7 @@ $time_left = date('G:i' ,(strtotime("tomorrow") - time()));
 
 function timer ($time) {
     $day = (strtotime($time) - strtotime("today")) / 86400;
-    if (!$day) {
+    if ($day < 1) {
         return date('Gч : iм' ,(strtotime("tomorrow") - time()));
     } else {
         return "Дней: {$day},  " . date('Gч : iм' ,(strtotime("tomorrow") - time()));

@@ -5,6 +5,16 @@ require_once 'data.php';
 require_once 'init.php';
 
 session_start();
+if (!$link) {
+  $error = mysqli_connect_error();
+  $page_content = renderTemplate($page_error,['erorr' => $error]);
+  $layout_page = renderTemplate($path_layout, ['content' => $page_content, 'categories' => $categories, 'title' => 'Вход']);
+} else {
+
+  $sql = 'SELECT `cat_id`, `cat_name` FROM categories
+      ORDER BY `cat_id`';
+      $result = mysqli_query($link, $sql);
+      $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
@@ -20,16 +30,18 @@ session_start();
     // print_r($errors);
     // print_r($form);
 
-    if (!$link) {
-      $error = mysqli_connect_error();
-      $page_content = renderTemplate($page_error,['erorr' => $error]);
-      $layout_page = renderTemplate($path_layout, ['content' => $page_content, 'categories' => $categories, 'title' => 'Вход']);
-    } else {
-      $sql = 'SELECT `user_email` AS `email`, `user_name` AS `name`, `user_pass` AS `password`, `user_avatar` FROM users';
+    
+      $sql = 'SELECT `cat_id`, `cat_name` FROM categories
+      ORDER BY `cat_id`';
+      $result = mysqli_query($link, $sql);
+      $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+      $sql = 'SELECT `user_id`, `user_email` AS `email`, `user_name` AS `name`, `user_pass` AS `password`, `user_avatar` FROM users';
       $res = mysqli_query($link, $sql);
       $users = mysqli_fetch_all($res, MYSQLI_ASSOC);
       // print_r($rows);
       print_r($users);
+      var_dump(mysqli_error($link));
 
       if(!count($errors) and $user = searchUserByEmail($form['email'], $users)) {
         if(password_verify($form['password'], $user['password'])) {
@@ -51,7 +63,7 @@ session_start();
         exit();
       }
 
-    }
+    
 
     
   }
@@ -67,6 +79,7 @@ session_start();
     }
     
   }
+}
 
   print $layout_page;
 

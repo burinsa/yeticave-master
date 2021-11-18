@@ -54,19 +54,25 @@
       <textarea id="message" name="description" placeholder="Напишите описание лота"><?= $value; ?></textarea>
       <span class="form__error"><?=$errors['Описание']?></span>
     </div>
-    <div class="form__item form__item--file"> <!-- form__item--uploaded -->
-      <label>Изображение</label>
-      <div class="preview">
+    <?php 
+        $classname_input = isset($errors['file']) ? 'form__item--invalid' : '';
+      ?>
+    <div class="form__item form__item--file <?= $classname_input; ?>"> <!-- form__item--uploaded -->
+      <label>Изображение</label>      
+      <div class="preview ">
         <button class="preview__remove" type="button">x</button>
-        <div class="preview__img">
+        <div class="preview__img ">
           <img class="img-prew" src="img/avatar.jpg" width="113" height="113" alt="Изображение лота">
         </div>
       </div>
+      
+      
       <div class="form__input-file">
         <input class="visually-hidden" type="file" id="photo2" name="photo2" value="" onchange="readFile(this)">
         <label class="prewImg" for="photo2">
           <span>+ Добавить</span>
         </label>
+        <span class="form__error"><?=$errors['file']?></span>
       </div>
     </div>
     <div class="form__container-three">

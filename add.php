@@ -1,6 +1,7 @@
 <?php
 require_once 'functions.php';
 require_once 'data.php';
+require_once 'init.php';
 session_start();
 
 if(!isset($_SESSION['user'])) {
@@ -12,58 +13,171 @@ function selected ($option, $val) {
     return ($option == $val) ? 'selected' : '';
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $lot = $_POST;
 
-    $required = ['title', 'category', 'description', 'price', 'lot-step', 'lot-date'];
-    $dest = ['title' => 'Наименование', 'category' => 'Категория', 'description' => 'Описание', 'price' => 'Начальная цена', 'lot-step' => 'Шаг ставки', 'lot-date' => 'Дата окончания торгов'];
-    $errors = [];
-    foreach ($required as $value) {
-        if (empty($_POST[$value])) {
-            $errors[$dest[$value]] = "Это поле нужно заполнить";
-        }  else {
-            if ($value == 'price') {
-                if (!filter_var($_POST['price'], FILTER_VALIDATE_INT)) {
-                    $errors[$dest[$value]] = "Допускается ввод только чисел";
-                }
-            } elseif ($value == 'lot-step') {
-                if (!filter_var($_POST['lot-step'], FILTER_VALIDATE_INT)) {
-                    $errors[$dest[$value]] = "Допускается ввод только чисел";
+if (!$link) {
+    $error = mysqli_connect_error();
+    $page_content = renderTemplate($page_error,['erorr' => $error]);
+    $layout_page = renderTemplate($path_layout, ['content' => $page_content, 'categories' => $categories, 'title' => 'Вход']);
+  }
+  else {
+    $sql = 'SELECT `cat_id`, `cat_name` FROM categories
+    ORDER BY `cat_id`';
+    $result = mysqli_query($link, $sql);
+    $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    // print_r($categories);
+
+    // foreach ($categories as $key => $value) {
+    //     print_r($value['cat_id']);
+    // }
+
+
+    // print_r($_SESSION['user']['user_id']);
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $lot = $_POST;
+    
+        $required = ['title', 'category', 'description', 'price', 'lot-step', 'lot-date'];
+        $dest = ['title' => 'Наименование', 'category' => 'Категория', 'description' => 'Описание', 'price' => 'Начальная цена', 'lot-step' => 'Шаг ставки', 'lot-date' => 'Дата окончания торгов'];
+        $errors = [];
+        foreach ($required as $value) {
+            if (empty($_POST[$value])) {
+                $errors[$dest[$value]] = "Это поле нужно заполнить";
+            }  else {
+                if ($value == 'price') {
+                    if (!filter_var($_POST['price'], FILTER_VALIDATE_INT)) {
+                        $errors[$dest[$value]] = "Допускается ввод только чисел";
+                    }
+                } elseif ($value == 'lot-step') {
+                    if (!filter_var($_POST['lot-step'], FILTER_VALIDATE_INT)) {
+                        $errors[$dest[$value]] = "Допускается ввод только чисел";
+                    }
                 }
             }
+    
         }
-
-    }
-
-    if (isset($_FILES['photo2'])) {
-        $file_name = $_FILES['photo2']['name'];
-        $file_path = __DIR__ . 'img/';
-        $file_url = 'img/' . $file_name;
-        move_uploaded_file($_FILES['photo2']['tmp_name'], $file_url);
-
-        $lot['img'] = $file_url;
-    }
     
     
-
-    if($_POST['category'] == 'Выберите категорию') {
-        $errors[$dest['category']] = 'Выберите категорию';
-    }
+        if (!empty($_FILES['photo2']['name'])) {
+            $file_name = $_FILES['photo2']['name'];
+            $file_path = __DIR__ . 'img/';
+            $file_url = 'img/' . $file_name;
+            $file_type = $_FILES['photo2']['type'];
+            
     
-    if (count($errors)) {
-        $page_add = renderTemplate($path_add, ['errors' => $errors, 'lot' => $lot]);
+            if ($file_type !== 'image/png' && $file_type !== 'image/jpeg') {
+                $errors['file'] = 'Загрузите изображение в формате "jpeg", "jpg", "png"';
+            } else {
+                move_uploaded_file($_FILES['photo2']['tmp_name'], $file_url);
+                $lot['img'] = $file_url;
+            }
+        } else {
+            $lot['img'] = null;
+        }
+        
+        
+    
+        if($_POST['category'] == 'Выберите категорию') {
+            $errors[$dest['category']] = 'Выберите категорию';
+        }
+        
+        if (count($errors)) {
+            $page_add = renderTemplate($path_add, ['errors' => $errors, 'lot' => $lot]);
+        } else {
+            foreach ($categories as $key => $value) {
+                if ($lot['category'] == $value['cat_name']) {
+                    $category = $value['cat_id'];
+                }
+            }
+            $name = $lot['title'];
+            $description = $lot['description'];
+            $img = $lot['img'];
+            $price = $lot['price'];
+            $step = $lot['lot-step'];
+            $date = $lot['lot-date'];
+            $user_id = $_SESSION['user']['user_id'];
+
+            $sql = 'INSERT INTO lots(dt_add, lot_name, lot_desc, lot_img, lot_price, lot_date, lot_step, `user_id`, `cat_id`)
+            VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)';
+            $stmt = mysqli_prepare($link, $sql);
+            mysqli_stmt_bind_param($stmt, 'sssisiii', $name, $description, $img, $price, $date, $step, $user_id, $category);
+            $res = mysqli_stmt_execute($stmt);
+
+            if ($res) {
+                $page_add = renderTemplate($path_lot,['lot' => $lot, 'title' => $lot['title'], 'time' => $time_left]);
+            }
+            // var_dump(mysqli_error($link));
+            
+        }
+        
+        // print(($_FILES['photo2']['name']));
+        // var_dump(isset($_FILES['photo2']['name']));
+        // var_dump(empty($_FILES['photo2']['name']));
+        
     } else {
-        $page_add = renderTemplate($path_lot,['lot' => $lot, 'title' => $lot['title'], 'time' => $time_left]);
+        $page_add = renderTemplate($path_add, []);
+        
     }
-    // print_r($errors);
-    // print '<br>';
-    // print_r($lot);
-    // print_r ($_FILES['photo2']);
+
+  }
+
+// if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+//     $lot = $_POST;
+
+//     $required = ['title', 'category', 'description', 'price', 'lot-step', 'lot-date'];
+//     $dest = ['title' => 'Наименование', 'category' => 'Категория', 'description' => 'Описание', 'price' => 'Начальная цена', 'lot-step' => 'Шаг ставки', 'lot-date' => 'Дата окончания торгов'];
+//     $errors = [];
+//     foreach ($required as $value) {
+//         if (empty($_POST[$value])) {
+//             $errors[$dest[$value]] = "Это поле нужно заполнить";
+//         }  else {
+//             if ($value == 'price') {
+//                 if (!filter_var($_POST['price'], FILTER_VALIDATE_INT)) {
+//                     $errors[$dest[$value]] = "Допускается ввод только чисел";
+//                 }
+//             } elseif ($value == 'lot-step') {
+//                 if (!filter_var($_POST['lot-step'], FILTER_VALIDATE_INT)) {
+//                     $errors[$dest[$value]] = "Допускается ввод только чисел";
+//                 }
+//             }
+//         }
+
+//     }
+
+//     if (isset($_FILES['photo2'])) {
+//         $file_name = $_FILES['photo2']['name'];
+//         $file_path = __DIR__ . 'img/';
+//         $file_url = 'img/' . $file_name;
+
+//         $finfo = finfo_open(FILEINFO_MIME_TYPE);
+// 		$file_type = finfo_file($finfo, $tmp_name);
+
+//         if ($file_type !== 'image/png' || $file_type !== 'image/jpeg') {
+//             $errors['file'] = 'Загрузите изображение в формате "jpeg", "jpg", "png"';
+//         } else {
+//             move_uploaded_file($_FILES['photo2']['tmp_name'], $file_url);
+//             $lot['img'] = $file_url;
+//         }
+//     }
+
+//     if($_POST['category'] == 'Выберите категорию') {
+//         $errors[$dest['category']] = 'Выберите категорию';
+//     }
+
+
     
-} else {
-    $page_add = renderTemplate($path_add, []);
+//     if (count($errors)) {
+//         $page_add = renderTemplate($path_add, ['errors' => $errors, 'lot' => $lot]);
+//     } else {
+//         $page_add = renderTemplate($path_lot,['lot' => $lot, 'title' => $lot['title'], 'time' => $time_left]);
+//     }
+//     // print_r($errors);
+//     // print '<br>';
+//     // print_r($lot);
+//     // print_r ($_FILES['photo2']);
     
-}
+// } else {
+//     $page_add = renderTemplate($path_add, []);
+    
+// }
 
 
 $layout_add = renderTemplate($path_layout, ['content' => $page_add, 'categories' => $categories, 'username' => $_SESSION['user']['name'], 'user_avatar' => $_SESSION['user']['user_avatar'], 'title' => 'Добавление лота']);

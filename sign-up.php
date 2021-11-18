@@ -3,34 +3,38 @@ require_once 'init.php';
 require_once 'functions.php';
 require_once 'data.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $form = $_POST;
+if (!$link) {
+  $error = mysqli_connect_error();
+  $page_content = renderTemplate($page_error,['erorr' => $error]);
+}
+else {
+  $sql = 'SELECT `cat_id`, `cat_name` FROM categories
+  ORDER BY `cat_id`';
+  $result = mysqli_query($link, $sql);
+  $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-  $required = ['email', 'password', 'name', 'message'];
-  $errors = [];
+  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $form = $_POST;
 
-  foreach ($required as $value) {
-    if (empty($form[$value])) {
-      $errors[$value] = 'Это поле нужно заполнить!';
-    } else {
-      if ($value == 'email') {
-        if (!filter_var($form['email'], FILTER_VALIDATE_EMAIL)) {
-          $errors[$value] = 'Введите корректный email!';
+    $required = ['email', 'password', 'name', 'message'];
+    $errors = [];
+
+    foreach ($required as $value) {
+      if (empty($form[$value])) {
+        $errors[$value] = 'Это поле нужно заполнить!';
+      } else {
+        if ($value == 'email') {
+          if (!filter_var($form['email'], FILTER_VALIDATE_EMAIL)) {
+            $errors[$value] = 'Введите корректный email!';
+          }
         }
       }
     }
-  }
 
-  if (count($errors)) {
-    $page_content = renderTemplate($path_sign_up, ['form' => $form, 'errors' => $errors]);
+    if (count($errors)) {
+      $page_content = renderTemplate($path_sign_up, ['form' => $form, 'errors' => $errors]);
     
-
-  } else { 
-    if (!$link) {
-      $error = mysqli_connect_error();
-      $page_content = renderTemplate($page_error,['erorr' => $error]);
-    }
-    else {
+    } else { 
       $email = $form['email'];
       $name = $form['name'];
       $message = $form['message'];
@@ -58,11 +62,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       // var_dump(mysqli_error($link));
     }
   }
+    else {
+      $page_content = renderTemplate($path_sign_up, []);     
+    }
 } 
-else {
-  $page_content = renderTemplate($path_sign_up, []);
- 
-}
+
+
 
 $layout_page = renderTemplate($path_layout, ['content' => $page_content, 'categories' => $categories, 'title' => 'Регистрация']);
 
