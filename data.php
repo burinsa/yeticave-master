@@ -18,6 +18,7 @@ $path_login = '\login.php';
 $path_sign_up = '\sign-up.php';
 $page_error = '\error.php';
 $page_search = '\search.php';
+$page_pagination = '\pagination.php';
 
 ///////////////////////////////////////
 

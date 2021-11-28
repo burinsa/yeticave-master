@@ -71,5 +71,5 @@ if (isset($_SESSION['user'])) {
     $layout_lot = renderTemplate($path_layout, ['content' => $page_lot, 'categories' => $categories, 'title' => $lot['title']]);
 }
 print $layout_lot;
-
+// print_r($_SESSION['user']);
 ?>

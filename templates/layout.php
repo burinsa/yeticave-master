@@ -44,28 +44,28 @@
 </header>
 
 <main class="container">
-<?php if ($_SERVER['REQUEST_URI'] == '/' || $_SERVER['REQUEST_URI'] == '/index.php') :?>
+<?php if ($_SERVER['REQUEST_URI'] == '/' ||  strpos($_SERVER['REQUEST_URI'], '/index.php') !== false) :?>
 <section class="promo">
     <h2 class="promo__title">Нужен стафф для катки?</h2>
     <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
     <ul class="promo__list">
         <li class="promo__item promo__item--boards">
-            <a class="promo__link" href="pages/all-lots.html">Доски и лыжи</a>
+            <a class="promo__link" href="/index.php?category=1">Доски и лыжи</a>
         </li>
         <li class="promo__item promo__item--attachment">
-            <a class="promo__link" href="pages/all-lots.html">Крепления</a>
+            <a class="promo__link" href="/index.php?category=2">Крепления</a>
         </li>
         <li class="promo__item promo__item--boots">
-            <a class="promo__link" href="pages/all-lots.html">Ботинки</a>
+            <a class="promo__link" href="/index.php?category=3">Ботинки</a>
         </li>
         <li class="promo__item promo__item--clothing">
-            <a class="promo__link" href="pages/all-lots.html">Одежда</a>
+            <a class="promo__link" href="/index.php?category=4">Одежда</a>
         </li>
         <li class="promo__item promo__item--tools">
-            <a class="promo__link" href="pages/all-lots.html">Инструменты</a>
+            <a class="promo__link" href="/index.php?category=5">Инструменты</a>
         </li>
         <li class="promo__item promo__item--other">
-            <a class="promo__link" href="pages/all-lots.html">Разное</a>
+            <a class="promo__link" href="/index.php?category=6">Разное</a>
         </li>
     </ul>
 </section>
@@ -76,9 +76,9 @@
 <div>
 <nav class="nav">
     <ul class="nav__list container">
-    <?php foreach ($categories as $item): ?>
+    <?php foreach ($categories as $key => $item): ?>
         <li class="nav__item">
-            <a href="all-lots.html"><?=$item['cat_name']?></a>
+            <a href="/index.php?category=<?=$key + 1?>"><?=$item['cat_name']?></a>
         </li>
     <?php endforeach ?>
     </ul>
@@ -89,14 +89,15 @@
 </script>
 <?php endif;?>
 <?= $content ?>
+
 </main>
 
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">
-            <?php foreach ($categories as $item): ?>
+            <?php foreach ($categories as $key => $item): ?>
             <li class="nav__item">
-                <a href="all-lots.html"><?=$item['cat_name']?></a>
+                <a href="/index.php?category=<?=$key + 1?>"><?=$item['cat_name']?></a>
             </li>
             <?php endforeach ?>
         </ul>
