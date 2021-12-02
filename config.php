@@ -4,7 +4,7 @@ $mainPage = ($_SERVER['REQUEST_URI'] == '/' || $_SERVER['REQUEST_URI'] == '/inde
 define('MAIN_PAGE', $mainPage);
 
 const DB_CONFIG = [
-  'host' => '595817-yeticave-master',
+  'host' => 'yeticave-master',
   'user' => 'root',
   'password' => '',
   'port' => 3306,

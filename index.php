@@ -65,6 +65,6 @@ if (isset($_SESSION['user'])) {
   $layout_page = renderTemplate($path_layout, ['content' => $page, 'categories' => $categories, 'title' => 'Главная']);
 }
 print $layout_page;
-var_dump(isset($_GET['category']));
+
 ?>
 
