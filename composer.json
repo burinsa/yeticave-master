@@ -1,0 +1,22 @@
+{
+    "name": "burin/yeticave",
+    "description": "website internet auction",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Burin\\Yeticave\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Burin Sergey",
+            "email": "burinsa@yandex.ru"
+        }
+    ],
+    "require": {
+        "symfony/mailer": "^4.4",
+        "wixel/gump": "^1.11",
+        "swiftmailer/swiftmailer": "^6.3"
+    }
+}

@@ -1,7 +1,7 @@
 <?php
 require_once 'functions.php';
-require_once 'data.php';
 require_once 'init.php';
+require_once 'vendor/autoload.php';
 session_start();
 
 if(!isset($_SESSION['user'])) {
@@ -24,13 +24,7 @@ if (!$link) {
     ORDER BY `cat_id`';
     $result = mysqli_query($link, $sql);
     $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    // print_r($categories);
-
-    // foreach ($categories as $key => $value) {
-    //     print_r($value['cat_id']);
-    // }
-
-
+   
     // print_r($_SESSION['user']['user_id']);
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $lot = $_POST;

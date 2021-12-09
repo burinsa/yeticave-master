@@ -2,6 +2,7 @@
 require_once 'init.php';
 require_once 'functions.php';
 require_once 'data.php';
+require_once 'vendor/autoload.php';
 
 if (!$link) {
   $error = mysqli_connect_error();
