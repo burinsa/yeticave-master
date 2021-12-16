@@ -2,28 +2,32 @@
 require_once 'functions.php';
 require_once 'init.php';
 require_once 'vendor/autoload.php';
+require_once 'Database.php';
 session_start();
+
+$dbHelper = new Database();
 
 if(!isset($_SESSION['user'])) {
     http_response_code(403);
     exit();
 }
-
+// запоминает выбор категории
 function selected ($option, $val) {
     return ($option == $val) ? 'selected' : '';
 }
 
-
-if (!$link) {
-    $error = mysqli_connect_error();
-    $page_content = renderTemplate($page_error,['erorr' => $error]);
-    $layout_page = renderTemplate($path_layout, ['content' => $page_content, 'categories' => $categories, 'title' => 'Вход']);
-  }
-  else {
+if ($dbHelper->getLastError()) {
+    $page = renderTemplate($page_error, $dbHelper->getLastError());
+  } else {
     $sql = 'SELECT `cat_id`, `cat_name` FROM categories
     ORDER BY `cat_id`';
-    $result = mysqli_query($link, $sql);
-    $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $dbHelper->mysqliQuery($sql);
+
+    if (!$dbHelper->getLastError()) {
+        $categories = $dbHelper->getResultsAsArray();
+      } else {
+        $page = renderTemplate($page_error,$dbHelper->getLastError());
+      }
    
     // print_r($_SESSION['user']['user_id']);
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -48,7 +52,6 @@ if (!$link) {
             }
     
         }
-    
     
         if (!empty($_FILES['photo2']['name'])) {
             $file_name = $_FILES['photo2']['name'];
@@ -91,13 +94,17 @@ if (!$link) {
 
             $sql = 'INSERT INTO lots(dt_add, lot_name, lot_desc, lot_img, lot_price, lot_date, lot_step, `user_id`, `cat_id`)
             VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)';
-            $stmt = mysqli_prepare($link, $sql);
-            mysqli_stmt_bind_param($stmt, 'sssisiii', $name, $description, $img, $price, $date, $step, $user_id, $category);
-            $res = mysqli_stmt_execute($stmt);
-
-
+            $res = $dbHelper->executeQuery($sql, [$name, $description, $img, $price, $date, $step, $user_id, $category]);
+            // $stmt = mysqli_prepare($link, $sql);
+            // $stmt = db_get_prepare_stmt($link, $sql, [$name, $description, $img, $price, $date, $step, $user_id, $category]);
+            // var_dump($stmt);
+            // mysqli_stmt_bind_param($stmt, 'sssisiii', $name, $description, $img, $price, $date, $step, $user_id, $category);
+            // $res =  mysqli_stmt_bind_result($stmt);
+            // $res = mysqli_stmt_execute($stmt);
+            // var_dump($res);
+        
             if ($res) {
-                $id_lot = mysqli_insert_id($link);
+                $id_lot = $dbHelper->getLastId();
                 $sql = 'SELECT `lot_id`, l.lot_name AS `title`, c.cat_name AS `category`, l.lot_price AS `price`, l.lot_img AS `img`, l.lot_desc AS `description`,  l.lot_date AS `lot-date`, l.lot_step AS step, l.user_id AS user  FROM lots AS l 
                 JOIN categories AS c ON l.cat_id = c.cat_id
                 WHERE l.lot_id = ' . $id_lot;
@@ -105,13 +112,8 @@ if (!$link) {
                 $lot = mysqli_fetch_assoc($result);
                 $page_add = renderTemplate($path_lot,['lot' => $lot, 'title' => $lot['title'], 'time' => $time_left, 'rates' => null ]);
             }
-            // var_dump(mysqli_error($link));
             
         }
-        
-        // print(($_FILES['photo2']['name']));
-        // var_dump(isset($_FILES['photo2']['name']));
-        // var_dump(empty($_FILES['photo2']['name']));
         
     } else {
         $page_add = renderTemplate($path_add, []);

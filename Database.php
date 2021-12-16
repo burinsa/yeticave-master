@@ -1,4 +1,5 @@
 <?php
+require_once 'mysql_helper.php';
 
 class Database {
   private $db_resourse;
@@ -17,9 +18,12 @@ class Database {
   public function executeQuery($sql, $data = []) {
     $this->last_error = null;
     $stmt = db_get_prepare_stmt($this->db_resourse, $sql, $data);
+    
+    // if ($r = mysqli_stmt_get_result($stmt)) {
+    //   $this->last_result = $r;
+    // }
 
-    if (mysqli_stmt_execute($stmt) && $r = mysqli_stmt_bind_result($stmt)) {
-      $this->last_result = $r;
+    if (mysqli_stmt_execute($stmt)) {
       $res = true;
     } else {
       $this->last_error = mysqli_error($this->db_resourse);
@@ -27,6 +31,13 @@ class Database {
     }
     return $res;
   } 
+
+  public function mysqliQuery($sql){
+    $result = mysqli_query($this->db_resourse, $sql);
+    $this->last_result = $result;
+    return $result;
+  }
+
   public function getLastError() {
     return $this->last_error;
   }
@@ -46,5 +57,9 @@ class Database {
 	public function getNumRows() {
 		return mysqli_num_rows($this->last_result);
 	}
+
+  public function getDbresours(){
+    return $this->db_resourse;
+  }
   
 }

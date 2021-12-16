@@ -2,7 +2,9 @@
 require_once 'functions.php';
 require_once 'init.php';
 require_once 'vendor/autoload.php';
+require_once 'Database.php';
 session_start();
+$dbHelper = new Database();
 
 // добавление в историю
 $counter_name = 'history'; 
@@ -22,17 +24,19 @@ if (isset($_COOKIE['history'])) {
 
 setcookie($counter_name, $id_encode, $expire, $path);
 
-if (!$link) {
-
-    $error = mysqli_connect_error();
-    $page = renderTemplate($page_error,['erorr' => $error]);
-
+if ($dbHelper->getLastError()) {
+    $page = renderTemplate($page_error, $dbHelper->getLastError());
   } else {
     //  получение категорий
     $sql = 'SELECT `cat_id`, `cat_name` FROM categories
     ORDER BY `cat_id`';
-    $result = mysqli_query($link, $sql);
-    $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);   
+    $dbHelper->mysqliQuery($sql);
+  
+    if (!$dbHelper->getLastError()) {
+      $categories = $dbHelper->getResultsAsArray();
+    } else {
+      $page = renderTemplate($page_error,$dbHelper->getLastError());
+    }
 
     if (isset($_GET['id_lot'])) {
         $lot_id = $_GET['id_lot'];
@@ -41,8 +45,8 @@ if (!$link) {
         JOIN categories AS c ON l.cat_id = c.cat_id
         WHERE l.lot_id = ' . $lot_id;
     
-        $res = mysqli_query($link, $sql);
-        $lot = mysqli_fetch_assoc($res);
+        $dbHelper->mysqliQuery($sql);
+        $lot = $dbHelper->getResultAsArray();
 
         // получение ставок по id лота
         $sql = "SELECT `rate_date` AS `date`, `rate_amount` AS `price`, `user_name` AS `name`, `lot_id` FROM `rate`".
@@ -50,9 +54,9 @@ if (!$link) {
         "WHERE rate.lot_id = " . $lot_id . 
         " ORDER BY `rate_date` DESC";
         
-        $res = mysqli_query($link, $sql);
-        $rates = mysqli_fetch_all($res, MYSQLI_ASSOC);
-        //    var_dump(mysqli_error($link));
+        $dbHelper->mysqliQuery($sql);
+        $rates = $dbHelper->getResultsAsArray();
+        
     } else {
         $lot = null;
     }
